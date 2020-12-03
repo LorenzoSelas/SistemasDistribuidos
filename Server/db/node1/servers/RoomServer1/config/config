@@ -1,0 +1,16 @@
+# Configuration file (11/29/20 20:20:53.771)
+
+# Server configuration
+Ice.Admin.ServerId=RoomServer1
+Ice.Admin.Endpoints=tcp -h localhost
+Ice.ProgramName=RoomServer1
+# Object adapter RoomAdapter
+RoomAdapter.Endpoints=tcp
+RoomAdapter.AdapterId=RoomServer1.RoomAdapter
+RoomAdapter.ReplicaGroupId=ReplicatedRoomAdapter
+# Server descriptor properties
+Identity=room1
+Ice.StdOut=/tmp/db/node1/distrib/RoomApp/server-out.txt
+Ice.ProgramName=RoomServer1.Room1
+Ice.StdErr=/tmp/db/node1/distrib/RoomApp/server-err.txt
+Ice.Default.Locator=IceGrid/Locator -t:tcp -h 127.0.0.1 -p 9091
