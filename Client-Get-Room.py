@@ -15,8 +15,9 @@ class Client(Ice.Application):
         if not room:
             raise RuntimeError('Invalid proxy')
 
-        print(room.getRoom())
-
+        
+        fr = open("icegauntlet-master/assets/mapa.json", "w")
+        fr.write(room.getRoom())
         return 0
 
 

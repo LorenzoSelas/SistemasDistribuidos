@@ -15,15 +15,17 @@ import json
 EXIT_OK = 0
 EXIT_ERROR = 1
 
-authServer
 
 path_rooms = "/home/loren/Documents/Sistemas Distribuidos/SSDD-Selas/Server/rooms/"
-path_authors=path_rooms + "Authors.json"
+path_Admin = "/home/loren/Documents/Sistemas Distribuidos/SSDD-Selas/Server/Administrar/"
+path_authors=path_Admin + "Authors.json"
 
 class RoomI(IceGauntlet.RoomManager):
+    def __init__(self, ser):
+        self.authServer=ser
 
     def publish(self, token, roomData, current=None):
-        proxy = server.communicator().stringToProxy(authServer)
+        proxy = server.communicator().stringToProxy(self.authServer)
         authent = IceGauntlet.AuthenticationPrx.checkedCast(proxy)
         if not authent:
             print('ERROR: auth server process not found. Is the server running?')
@@ -31,7 +33,6 @@ class RoomI(IceGauntlet.RoomManager):
         if authent.isValid(token):
             datos=json.loads(roomData)
             path_room=path_rooms + (datos['room'])
-
 
             if path.exists(path_room):
                 raise IceGauntlet.RoomAlreadyExists
@@ -62,7 +63,7 @@ class RoomI(IceGauntlet.RoomManager):
         raise IceGauntlet.Unauthorized
     
     def remove(self, token, roomName, current=None):
-        proxy = server.communicator().stringToProxy(authServer)
+        proxy = server.communicator().stringToProxy(self.authServer)
         authent = IceGauntlet.AuthenticationPrx.checkedCast(proxy)
         if not authent:
             print('ERROR: auth server process not found. Is the server running?')
@@ -74,7 +75,7 @@ class RoomI(IceGauntlet.RoomManager):
                 for i in range(len(Authors['mapas'])):
                     aux=str(Authors['mapas'][i])
                     linea=json.loads(aux.replace("'",'"'))
-                    if linea['token']==token
+                    if linea['token']==token:
                         del (Authors['mapas'][i])
                         remove(path_rooms + roomName)
                         fAuthors = open(path_authors, "w")
@@ -86,16 +87,21 @@ class RoomI(IceGauntlet.RoomManager):
 class Server(Ice.Application):
     def run(self, argv):
         if not len(argv)==2:
-            print("use: ./run_map_server --Ice.Config=Server.config <servidor autenticación>")
-            sys.exit(server.main(sys.argv))
-        authServer=argv[1]
+            print("use: ./ServerMapManager.py --Ice.Config=Server.config <servidor autenticación>")
+            return 0
         broker = self.communicator()
-        servant = RoomI()
+        servant = RoomI(argv[1])
 
         adapter = broker.createObjectAdapter("MapAdapter")
         proxy = adapter.add(servant, broker.stringToIdentity("map1"))
 
-        print(proxy, flush=True)
+        proxyauth = server.communicator().stringToProxy(argv[1])
+        authent = IceGauntlet.AuthenticationPrx.checkedCast(proxyauth)
+        if not authent:
+            print('ERROR: auth server process not found. Is the server running?')
+            return EXIT_ERROR
+            
+        print('"{}"'.format(proxy), flush=True)
 
         adapter.activate()
         self.shutdownOnInterrupt()

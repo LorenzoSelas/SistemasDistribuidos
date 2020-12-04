@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+
+import os
+import sys
+
+try:
+    import pexpect
+except ImportError:
+    print('Required library "pexpect" not exists. Install with pip and try again')
+    sys.exit(1)
+
+_COMMAND_ = './ServerMapManager.py --Ice.Config=Server.config "%(auth_proxy)s" '
+
+try:
+    proxy= sys.argv[1]
+except ValueError:
+    print('Command arguments: {} <auth_proxy> '.format(
+        os.path.basename(sys.argv[0]))
+    )
+    sys.exit(1)
+
+# Compose command
+final_command = _COMMAND_ % {
+    'auth_proxy': proxy
+}
+proc = pexpect.spawn(final_command, echo=False)
+proc.expect(['\n'])
+print(proc.before.decode().strip())
+
+
+while(1):
+    if 0:
+        sys.exit(1)
