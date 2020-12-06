@@ -10,21 +10,20 @@ except ImportError:
     print('Required library "pexpect" not exists. Install with pip and try again')
     sys.exit(1)
 
-_COMMAND_ = './Client-Delete-Map.py --Ice.Config=Server.config "%(map_proxy)s" "%(token)s" "%(nombre)s"'
+_COMMAND_ = './dungeon_local --Ice.Config=Client.config "%(game_proxy)s" \'warrior\''
 
 try:
-    proxy, token, nombre = sys.argv[1:]
+    proxy = sys.argv[1]
 except ValueError:
-    print('Command arguments: {} <map_proxy> <token> <nombre>'.format(
+    print('Command arguments: {} <game_proxy> '.format(
         os.path.basename(sys.argv[0]))
     )
     sys.exit(1)
 
 # Compose command
 final_command = _COMMAND_ % {
-    'map_proxy': proxy,
-    'token': token,
-    'nombre': nombre
+    'game_proxy': proxy
 }
 
-proc = pexpect.run(final_command, echo=False)
+proc = pexpect.spawn(final_command, echo=False)
+proc.expect(['Thanks for playing!'])

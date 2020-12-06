@@ -10,7 +10,7 @@ except ImportError:
     print('Required library "pexpect" not exists. Install with pip and try again')
     sys.exit(1)
 
-_COMMAND_ = './Client-Publish-Map.py --Ice.Config=Server.config "%(map_proxy)s" "%(token)s" "%(archivo)s"'
+_COMMAND_ = './Client-Publish-Map.py --Ice.Config=Server.config "%(map_proxy)s" %(token)s "%(archivo)s"'
 
 try:
     proxy, token, archivo = sys.argv[1:]
@@ -26,6 +26,5 @@ final_command = _COMMAND_ % {
     'token': token,
     'archivo': archivo
 }
-proc = pexpect.spawn(final_command, echo=False)
-proc.expect([''])
-print(proc.before.decode().strip())
+
+proc = pexpect.run(final_command, echo=False)
