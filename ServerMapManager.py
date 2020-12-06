@@ -16,8 +16,8 @@ EXIT_OK = 0
 EXIT_ERROR = 1
 
 
-path_rooms = "/home/loren/Documents/Sistemas Distribuidos/SSDD-Selas/Server/rooms/"
-path_Admin = "/home/loren/Documents/Sistemas Distribuidos/SSDD-Selas/Server/Administrar/"
+path_rooms = "Server/rooms/"
+path_Admin = "Server/Administrar/"
 path_authors=path_Admin + "Authors.json"
 
 class RoomI(IceGauntlet.RoomManager):
