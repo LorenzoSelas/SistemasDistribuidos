@@ -15,7 +15,7 @@ import json
 EXIT_OK = 0
 EXIT_ERROR = 1
 
-path_rooms = "/home/loren/Documents/Sistemas Distribuidos/SSDD-Selas/Server/rooms/"
+path_rooms = "Server/rooms/"
 
 class DungeonI(IceGauntlet.Dungeon):
 
