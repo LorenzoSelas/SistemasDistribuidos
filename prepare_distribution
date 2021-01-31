@@ -1,0 +1,15 @@
+#!/bin/bash
+
+dir="/tmp/IcePatchIceGauntlet"
+if [ -n "$1" ]; then
+	dir=$1
+fi
+mkdir -p $dir
+cp icegauntlet.ice $dir
+cp auth_server.py $dir
+cp icegauntlettool.py $dir
+cp ServerMapManager.py $dir
+mkdir $dir/IceStorm
+mkdir -p $dir/Server/rooms/
+
+icepatch2calc $dir
